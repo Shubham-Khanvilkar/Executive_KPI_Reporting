@@ -1,0 +1,43 @@
+// Executive KPI measures
+Total AUM = SUM(monthly_kpis[aum])
+
+Total Inflows = SUM(monthly_kpis[inflows])
+
+Total Outflows = SUM(monthly_kpis[outflows])
+
+NNA = [Total Inflows] - [Total Outflows]
+
+Target NNA = SUM(monthly_kpis[target_nna])
+
+NNA Attainment % = DIVIDE([NNA], [Target NNA])
+
+Net Flow Rate % = DIVIDE([NNA], [Total AUM])
+
+Total Revenue = SUM(monthly_kpis[revenue])
+
+Total Opex = SUM(monthly_kpis[opex])
+
+Operating Profit = [Total Revenue] - [Total Opex]
+
+Operating Margin % = DIVIDE([Operating Profit], [Total Revenue])
+
+Clients = SUM(monthly_kpis[clients])
+
+Retained Clients = SUM(monthly_kpis[retained_clients])
+
+Retention Rate % = DIVIDE([Retained Clients], [Clients])
+
+NNA Variance = [NNA] - [Target NNA]
+
+NNA MoM % =
+VAR CurrentNNA = [NNA]
+VAR PriorNNA = CALCULATE([NNA], DATEADD(monthly_kpis[month], -1, MONTH))
+RETURN DIVIDE(CurrentNNA - PriorNNA, PriorNNA)
+
+NNA Status =
+SWITCH(
+    TRUE(),
+    [NNA Attainment %] >= 1, "On / Above Target",
+    [NNA Attainment %] >= 0.9, "Near Target",
+    "Below Target"
+)
